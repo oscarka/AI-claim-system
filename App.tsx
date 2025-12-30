@@ -159,7 +159,7 @@ const App: React.FC = () => {
            <div className="flex items-center gap-6">
               <div className="flex flex-col items-end">
                  <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] animate-pulse">AI Agent Active</span>
-                 <span className="text-[9px] text-gray-400 font-bold uppercase">Gemini 3 Flash Enabled</span>
+                 <span className="text-[9px] text-gray-400 font-bold uppercase">DeepSeek Enabled</span>
               </div>
               <div className="h-8 w-px bg-gray-100"></div>
               <img src="https://picsum.photos/seed/user/64/64" className="w-9 h-9 rounded-xl border-2 border-indigo-100 shadow-sm" alt="Admin" />

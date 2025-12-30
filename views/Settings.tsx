@@ -121,7 +121,7 @@ const Settings: React.FC = () => {
                  <p className="text-xs font-black text-gray-400 uppercase tracking-widest">模型版本管理</p>
                  <div className="p-4 border border-indigo-200 bg-indigo-50/20 rounded-2xl">
                     <div className="flex justify-between items-center mb-2">
-                       <span className="text-[11px] font-bold text-indigo-600">Gemini 3 Flash (Latest)</span>
+                       <span className="text-[11px] font-bold text-indigo-600">DeepSeek (Latest)</span>
                        <span className="px-2 py-0.5 bg-green-500 text-white text-[8px] rounded uppercase font-black">Stable</span>
                     </div>
                     <p className="text-[10px] text-gray-400">已于 2024-05-20 部署。推理性能提升 40%，OCR 识别精度提升至 99.4%。</p>
