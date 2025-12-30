@@ -2,13 +2,26 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Claim, DocType } from "../types";
 
-// Always use named parameter for apiKey and directly from process.env.API_KEY
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// 获取 API Key，优先使用 GEMINI_API_KEY，然后是 API_KEY
+const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || '';
+
+// 检查 API Key 是否存在
+if (!apiKey) {
+  console.error('⚠️ GEMINI_API_KEY 未配置！请在 Cloudflare Pages 环境变量中设置 GEMINI_API_KEY');
+}
+
+// 初始化 GoogleGenAI，如果 API Key 为空，会在调用时失败
+const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 /**
  * 智能文档分类
  */
 export const classifyDocument = async (imageUrl: string): Promise<{ type: DocType; confidence: number }> => {
+  if (!ai) {
+    console.error('⚠️ Gemini API 未初始化：缺少 API Key');
+    return { type: '未知', confidence: 0 };
+  }
+  
   const prompt = `分析这张医疗理赔单据影像，将其分类为以下之一：'发票', '费用明细', '诊断证明', '出院小结', '身份证明'。如果是其他，返回'未知'。同时给出 0-1 之间的置信度。返回 JSON 格式。`;
   
   try {
@@ -37,6 +50,11 @@ export const classifyDocument = async (imageUrl: string): Promise<{ type: DocTyp
  * 增强版 OCR 识别
  */
 export const getDetailedOCR = async (fileName: string) => {
+  if (!ai) {
+    console.error('⚠️ Gemini API 未初始化：缺少 API Key');
+    return null;
+  }
+  
   const prompt = `从医疗单据 "${fileName}" 中提取深度信息。要求返回 JSON：
   - patientName: 姓名
   - hospital: 医院名称
@@ -67,6 +85,11 @@ export const getDetailedOCR = async (fileName: string) => {
  * 个人健康状况总结
  */
 export const getInsuredHealthSummary = async (name: string, history: any[]) => {
+  if (!ai) {
+    console.error('⚠️ Gemini API 未初始化：缺少 API Key');
+    return "暂时无法生成健康总结。API Key 未配置。";
+  }
+  
   const prompt = `你是一位专业的保险核保专家。请根据客户 "${name}" 的历史理赔记录：${JSON.stringify(history)}，生成一份专业的个人健康评估总结。
   字数控制在200字以内，包含健康趋势分析、慢性病风险预警和核保建议。用中文书写。`;
 
@@ -86,6 +109,11 @@ export const getInsuredHealthSummary = async (name: string, history: any[]) => {
  * 获取案件 AI 总结
  */
 export const getAIClaimSummary = async (claim: Claim): Promise<string> => {
+  if (!ai) {
+    console.error('⚠️ Gemini API 未初始化：缺少 API Key');
+    return "未能生成案件建议。API Key 未配置，请在 Cloudflare Pages 环境变量中设置 GEMINI_API_KEY。";
+  }
+  
   const prompt = `分析理赔案件 ${claim.caseNumber}。被保险人：${claim.insuredName}，金额：¥${claim.amount}。请基于医疗常规逻辑，给出一份简短的理赔审批建议。用中文书写，150字以内。`;
 
   try {
