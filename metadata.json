@@ -1,0 +1,7 @@
+{
+  "name": "Aisur - AI Group Insurance Claims System",
+  "description": "A sophisticated AI-powered back-office system for group insurance claim preliminary review, featuring OCR identification, policy matching, and health knowledge graphs.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
